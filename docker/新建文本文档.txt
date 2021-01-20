@@ -1,0 +1,9 @@
+docker run -it -d -p 5044:5044  -p 5045:5045 -p 5046:5046  -p 5047:5047  --name logstash  -e  LS_JAVA_OPTS="-Xms128m -Xmx128m"  --link elasticsearch:es  -v /mydata/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml  -v /mydata/logstash/conf.d/:/usr/share/logstash/conf.d/ logstash:7.4.1
+
+
+logstash-plugin install logstash-codec-json_lines
+
+docker run -p 8080:8080 -p 50000:5000 --name jenkins \
+-u root \
+-v /mydata/jenkins_home:/var/jenkins_home \
+-d jenkins/jenkins:lts
