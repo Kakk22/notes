@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="899108e0-329a-47bf-950f-778f94c91be9" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/Linux/Linux 学习.md" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/Linux 学习.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux/Linux 开发常用命令.md" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/Linux 开发常用命令.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux/Shell 脚本.md" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/Shell 脚本.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux/dockers elasticesearch.md" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/dockers elasticesearch.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/Docker Compose 编排.md" beforeDir="false" afterPath="$PROJECT_DIR$/docker/Docker Compose 编排.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/Dockerfile.md" beforeDir="false" afterPath="$PROJECT_DIR$/docker/Dockerfile.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/Docker命令.md" beforeDir="false" afterPath="$PROJECT_DIR$/docker/Docker命令.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/新建文本文档.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docker/新建文本文档.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dubbo/Dubbo  SPI.md" beforeDir="false" afterPath="$PROJECT_DIR$/dubbo/Dubbo  SPI.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dubbo/Dubbo 服务引用大致流程.md" beforeDir="false" afterPath="$PROJECT_DIR$/dubbo/Dubbo 服务引用大致流程.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dubbo/Dubbo 服务暴露过程.md" beforeDir="false" afterPath="$PROJECT_DIR$/dubbo/Dubbo 服务暴露过程.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dubbo/Dubbo 集群和负载均衡.md" beforeDir="false" afterPath="$PROJECT_DIR$/dubbo/Dubbo 集群和负载均衡.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dubbo/Dubbo服务调用过程.md" beforeDir="false" afterPath="$PROJECT_DIR$/dubbo/Dubbo服务调用过程.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dubbo/Dubbo面试题.md" beforeDir="false" afterPath="$PROJECT_DIR$/dubbo/Dubbo面试题.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dubbo/Springboot整合Dubbo实现远程服务调用.md" beforeDir="false" afterPath="$PROJECT_DIR$/dubbo/Springboot整合Dubbo实现远程服务调用.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dubbo/dubbo前言.md" beforeDir="false" afterPath="$PROJECT_DIR$/dubbo/dubbo前言.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/es/Elasticsearch.md" beforeDir="false" afterPath="$PROJECT_DIR$/es/Elasticsearch.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/git/Git在本地不提交前提下，拉去远程最新代码.md" beforeDir="false" afterPath="$PROJECT_DIR$/git/Git在本地不提交前提下，拉去远程最新代码.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/git/Git工作常用命令.md" beforeDir="false" afterPath="$PROJECT_DIR$/git/Git工作常用命令.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/git/git学习.md" beforeDir="false" afterPath="$PROJECT_DIR$/git/git学习.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/idea/idea快捷键.md" beforeDir="false" afterPath="$PROJECT_DIR$/idea/idea快捷键.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java知识/SFTP工具类 上传文件至LIXUX.md" beforeDir="false" afterPath="$PROJECT_DIR$/java知识/SFTP工具类 上传文件至LIXUX.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java知识/java Stream.md" beforeDir="false" afterPath="$PROJECT_DIR$/java知识/java Stream.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java知识/序列化/proto简单使用.md" beforeDir="false" afterPath="$PROJECT_DIR$/java知识/序列化/proto简单使用.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java知识/服务器获取客户端请求信息.md" beforeDir="false" afterPath="$PROJECT_DIR$/java知识/服务器获取客户端请求信息.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java知识/线上排错/jstack.md" beforeDir="false" afterPath="$PROJECT_DIR$/java知识/线上排错/jstack.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jvm/java中堆和栈.md" beforeDir="false" afterPath="$PROJECT_DIR$/jvm/java中堆和栈.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/leetcode/数组/leetcode 344 反转字符串.md" beforeDir="false" afterPath="$PROJECT_DIR$/leetcode/数组/leetcode 344 反转字符串.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mall项目/@Target、@Retention、@Documented注解简介.md" beforeDir="false" afterPath="$PROJECT_DIR$/mall项目/@Target、@Retention、@Documented注解简介.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mall项目/Spring Data Redis 最佳实践！.md" beforeDir="false" afterPath="$PROJECT_DIR$/mall项目/Spring Data Redis 最佳实践！.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mall项目/Swagger-UI.md" beforeDir="false" afterPath="$PROJECT_DIR$/mall项目/Swagger-UI.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mall项目/mall整合RabbitMQ实现延迟消息.md" beforeDir="false" afterPath="$PROJECT_DIR$/mall项目/mall整合RabbitMQ实现延迟消息.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mall项目/mall整合SpringSecurity和JWT实现认证和授权.md" beforeDir="false" afterPath="$PROJECT_DIR$/mall项目/mall整合SpringSecurity和JWT实现认证和授权.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mall项目/使用Redis+AOP优化权限管理功能.md" beforeDir="false" afterPath="$PROJECT_DIR$/mall项目/使用Redis+AOP优化权限管理功能.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mall项目/使用流将分类关系组成树状结构.md" beforeDir="false" afterPath="$PROJECT_DIR$/mall项目/使用流将分类关系组成树状结构.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maven/maven 常用命令.md" beforeDir="false" afterPath="$PROJECT_DIR$/maven/maven 常用命令.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysql/MySQL索引.md" beforeDir="false" afterPath="$PROJECT_DIR$/mysql/MySQL索引.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysql/mysql事务.md" beforeDir="false" afterPath="$PROJECT_DIR$/mysql/mysql事务.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysql/sql练习.md" beforeDir="false" afterPath="$PROJECT_DIR$/mysql/sql练习.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysql/sql限时题目.md" beforeDir="false" afterPath="$PROJECT_DIR$/mysql/sql限时题目.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysql/实战sql.md" beforeDir="false" afterPath="$PROJECT_DIR$/mysql/实战sql.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysql/数据库基础知识.md" beforeDir="false" afterPath="$PROJECT_DIR$/mysql/数据库基础知识.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysql/深入理解MySQL索引之B+Tree.md" beforeDir="false" afterPath="$PROJECT_DIR$/mysql/深入理解MySQL索引之B+Tree.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysql/高性能MySQL 笔记.md" beforeDir="false" afterPath="$PROJECT_DIR$/mysql/高性能MySQL 笔记.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/netty/netty权威指南笔记.md" beforeDir="false" afterPath="$PROJECT_DIR$/netty/netty权威指南笔记.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nginx/Nginx.md" beforeDir="false" afterPath="$PROJECT_DIR$/nginx/Nginx.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rabbitMQ/RabbitMQ-学习.md" beforeDir="false" afterPath="$PROJECT_DIR$/rabbitMQ/RabbitMQ-学习.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redis/Redis 三种集群模式.md" beforeDir="false" afterPath="$PROJECT_DIR$/redis/Redis 三种集群模式.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redis/Redis 核心原理与应用实践.md" beforeDir="false" afterPath="$PROJECT_DIR$/redis/Redis 核心原理与应用实践.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redis/Redis 重点问题.md" beforeDir="false" afterPath="$PROJECT_DIR$/redis/Redis 重点问题.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redis/Redis.md" beforeDir="false" afterPath="$PROJECT_DIR$/redis/Redis.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redis/redis List.md" beforeDir="false" afterPath="$PROJECT_DIR$/redis/redis List.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redis/redis 分布式锁set.md" beforeDir="false" afterPath="$PROJECT_DIR$/redis/redis 分布式锁set.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redis/使用docker compose 搭建Redis Cluster集群.md" beforeDir="false" afterPath="$PROJECT_DIR$/redis/使用docker compose 搭建Redis Cluster集群.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring/Spring.md" beforeDir="false" afterPath="$PROJECT_DIR$/spring/Spring.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot/Spring Boot高级.md" beforeDir="false" afterPath="$PROJECT_DIR$/springboot/Spring Boot高级.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue/vue 项目启动遇见的坑.md" beforeDir="false" afterPath="$PROJECT_DIR$/vue/vue 项目启动遇见的坑.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/尚硅谷一到三季/第一季笔记.md" beforeDir="false" afterPath="$PROJECT_DIR$/尚硅谷一到三季/第一季笔记.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/开发常见 命令/开发者必备Docker命令.md" beforeDir="false" afterPath="$PROJECT_DIR$/开发常见 命令/开发者必备Docker命令.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/设计模式/设计模式.md" beforeDir="false" afterPath="$PROJECT_DIR$/设计模式/设计模式.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/读书笔记/Java并发编程之美 笔记.md" beforeDir="false" afterPath="$PROJECT_DIR$/读书笔记/Java并发编程之美 笔记.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/读书笔记/计算机基础.md" beforeDir="false" afterPath="$PROJECT_DIR$/读书笔记/计算机基础.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/面试/spring/Spring循环依赖.md" beforeDir="false" afterPath="$PROJECT_DIR$/面试/spring/Spring循环依赖.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/面试/spring/spring.md" beforeDir="false" afterPath="$PROJECT_DIR$/面试/spring/spring.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/面试/集合/ArrayList.md" beforeDir="false" afterPath="$PROJECT_DIR$/面试/集合/ArrayList.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/面试/集合/ConcurrentHashMap 底层原理.md" beforeDir="false" afterPath="$PROJECT_DIR$/面试/集合/ConcurrentHashMap 底层原理.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/面试/集合/HashMap 总结.md" beforeDir="false" afterPath="$PROJECT_DIR$/面试/集合/HashMap 总结.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/面试/集合/集合总结.md" beforeDir="false" afterPath="$PROJECT_DIR$/面试/集合/集合总结.md" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="projectSyncType">
+      <map>
+        <entry key="D:/java exercise/github/halo-master" value="PREVIEW" />
+        <entry key="D:/java 学习资料/halo" value="PREVIEW" />
+      </map>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="D:\Program Files\apache-maven-3.6.1\maven_repository" />
+        <option name="mavenHome" value="D:/Program Files/apache-maven-3.6.1" />
+        <option name="userSettingsFile" value="D:\Program Files\apache-maven-3.6.1\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-64" />
+    <option name="y" value="51" />
+    <option name="width" value="1934" />
+    <option name="height" value="1066" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="AndroidView" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="笔记" type="b2602c69:ProjectViewProjectNode" />
+              <item name="笔记" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="com.alibabacloud.intellij.config.AccountConfigurable" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <properties />
+      <listeners />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\Cheny\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="899108e0-329a-47bf-950f-778f94c91be9" name="Default" comment="" />
+      <created>1611115686765</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611115686765</updated>
+      <workItem from="1611115688248" duration="138000" />
+      <workItem from="1611115860199" duration="659000" />
+    </task>
+    <task id="LOCAL-00001" summary="init project">
+      <created>1611116058253</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1611116058253</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="797000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <layout>
+      <window_info anchor="right" id="PlantUML" order="3" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="RestServices" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="right" id="Maven Projects" order="3" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="right" id="Word Book" order="3" side_tool="true" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info id="Designer" order="2" />
+      <window_info anchor="bottom" id="Docker" order="7" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info id="UI Designer" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Codota" order="3" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info id="Image Layers" order="2" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.3398058" />
+      <window_info anchor="right" id="leetcode" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.3286638" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info anchor="bottom" id="Alibaba Cloud View" order="7" weight="0.32901832" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info id="Alibaba Cloud Explorer" order="2" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init project" />
+    <option name="LAST_COMMIT_MESSAGE" value="init project" />
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
