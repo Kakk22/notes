@@ -1583,5 +1583,33 @@ Netty服务端创建的关键和原理解析。
 
 **步骤7：**Selector轮询。
 
+**步骤8：**当轮询到准备就绪的Channel之后，就由Reactor线程NioEventLoop执行ChannelPipeline的相应方法，最终调用并执行ChannelHandler。
+
+![image-20210120164327195](C:\Users\borche\AppData\Roaming\Typora\typora-user-images\image-20210120164327195.png)
+
+**步骤9：** 执行根据用户添加定制ChannelHandler及系统ChannelHandler。ChannelPipeline根据网络事件的类型 ，调度并执行ChannelHandler。
+
+# 第十四章 客户端创建
+
+**Netty客户端创建流程分析：**
+
+**步骤1：**用户线程创建Bootstrap实例，通过API设置创建客户端相关的参数，异步发起客户端连接。
+
+**步骤2：**创建处理客户端连接、I/O读写Reactor线程组NioEventLoopGroup。可以通过构造函数指定I/O线程的个数。默认是CPU内核的2倍。
+
+**步骤3：**通过Bootstrap的ChannelFactory和用户指定的Channel类型创建用于客户端连接的NioSocketChannel。
+
+**步骤4：** 创建Channel Handler Pipeline。用于调度和执行网络事件。
+
+**步骤5：**异步发起TCP连接，判断连接是否成功。如果成功，则直接将	NioSocketChannel注册到多路复选器上，监听读操作位。如果没有连接成功，则注册连接监听到多路复用器，等待连接结果。
+
+**步骤6：**注册对应的网络监听状态位到多路复用器；
+
+**步骤7：**由多路复选器在I/O现场中轮询各Channel，处理连接结果。
+
+**步骤8：**如果连接成功，设置Future结果。发送连接成功事件，触发ChannelPipleline。
+
+**步骤9：**由ChannelPipeline调度执行用户的ChannelHandler 执行业务逻辑。
+
 
 
