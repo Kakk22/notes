@@ -1306,3 +1306,336 @@ protected void populateBean(String beanName, RootBeanDefinition mbd, @Nullable B
 	}
 ```
 
+#### 8.4 初始化bean
+
+```java
+protected Object initializeBean(String beanName, Object bean, @Nullable RootBeanDefinition mbd) {
+   if (System.getSecurityManager() != null) {
+      AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
+          // 激活aware
+         invokeAwareMethods(beanName, bean);
+         return null;
+      }, getAccessControlContext());
+   }
+   else {
+       // 对特殊bean的处理:Aware BeanClassLoaderAware BeanFactoryAware
+      invokeAwareMethods(beanName, bean);
+   }
+
+   Object wrappedBean = bean;
+   if (mbd == null || !mbd.isSynthetic()) {
+       // 前置处理器应用
+      wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
+   }
+
+   try {
+       // 激活用户自定义的init方法
+      invokeInitMethods(beanName, wrappedBean, mbd);
+   }
+   catch (Throwable ex) {
+      throw new BeanCreationException(
+            (mbd != null ? mbd.getResourceDescription() : null),
+            beanName, "Invocation of init method failed", ex);
+   }
+   if (mbd == null || !mbd.isSynthetic()) {
+       // 后置处理器应用
+      wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
+   }
+
+   return wrappedBean;
+}
+```
+
+1. 激活aware方法
+
+   Spring框架中提供了许多实现了Aware接口的类，这些类主要是为了辅助Spring访问容器中的数据，比如`BeanNameAware`，这个类能够在Spring容器加载的过程中将Bean的名字（id）赋值给变量。
+
+   例如：**ApplicationContextAware**
+
+   ApplicationContext可以获取容器中的bean，但是必须注入才能使用，当一些类不能注入的时候怎么才能获得bean呢？比如Utils中的类，通常不能直接通过注入直接使用ApplicationContext，此时就需要借助`ApplicationContextAware`这个接口了。
+
+2. 处理器的应用
+
+   **BeanPostProcessor**为bean的处理器。可以根据此在bean的初始化前或初始化后进行业务的处理。
+
+3. 激活用户自定义init方法
+
+   ```java
+   	protected void invokeInitMethods(String beanName, Object bean, @Nullable RootBeanDefinition mbd)
+   			throws Throwable {
+   		// 首先检查是否是InitializingBean 如果是的话要调用afterPropertiesSet方法
+   		boolean isInitializingBean = (bean instanceof InitializingBean);
+   		if (isInitializingBean && (mbd == null || !mbd.isExternallyManagedInitMethod("afterPropertiesSet"))) {
+   			if (logger.isTraceEnabled()) {
+   				logger.trace("Invoking afterPropertiesSet() on bean with name '" + beanName + "'");
+   			}
+   			if (System.getSecurityManager() != null) {
+   				try {
+   					AccessController.doPrivileged((PrivilegedExceptionAction<Object>) () -> {
+   						((InitializingBean) bean).afterPropertiesSet();
+   						return null;
+   					}, getAccessControlContext());
+   				}
+   				catch (PrivilegedActionException pae) {
+   					throw pae.getException();
+   				}
+   			}
+   			else {
+                   // 属性初始化后的处理
+   				((InitializingBean) bean).afterPropertiesSet();
+   			}
+   		}
+   
+   		if (mbd != null && bean.getClass() != NullBean.class) {
+   			String initMethodName = mbd.getInitMethodName();
+   			if (StringUtils.hasLength(initMethodName) &&
+   					!(isInitializingBean && "afterPropertiesSet".equals(initMethodName)) &&
+   					!mbd.isExternallyManagedInitMethod(initMethodName)) {
+                   // 调用自定义初始化的方法
+   				invokeCustomInitMethod(beanName, bean, mbd);
+   			}
+   		}
+   	}
+   ```
+
+#### 8.5 注册DisposableBean
+
+销毁bean除了配置属性`destory-method`方法外
+
+用户还可以注册后处理器`DestructionAwareBeanPostProcessors`
+
+```java
+	protected void registerDisposableBeanIfNecessary(String beanName, Object bean, RootBeanDefinition mbd) {
+		AccessControlContext acc = (System.getSecurityManager() != null ? getAccessControlContext() : null);
+		if (!mbd.isPrototype() && requiresDestruction(bean, mbd)) {
+			if (mbd.isSingleton()) {
+				// Register a DisposableBean implementation that performs all destruction
+				// work for the given bean: DestructionAwareBeanPostProcessors,
+				// DisposableBean interface, custom destroy method.
+				registerDisposableBean(beanName,
+						new DisposableBeanAdapter(bean, beanName, mbd, getBeanPostProcessors(), acc));
+			}
+			else {
+				// A bean with a custom scope...
+				Scope scope = this.scopes.get(mbd.getScope());
+				if (scope == null) {
+					throw new IllegalStateException("No Scope registered for scope name '" + mbd.getScope() + "'");
+				}
+				scope.registerDestructionCallback(beanName,
+						new DisposableBeanAdapter(bean, beanName, mbd, getBeanPostProcessors(), acc));
+			}
+		}
+	}
+```
+
+### 9.bean的生命周期图
+
+![image-20210202104014894](https://gitee.com/chen_yi_fenga/blog-imag/raw/master/image-20210202104014894.png)
+
+## 第6章 容器的功能扩展
+
+### 1、扩展功能
+
+使用`ApplicationContext`加载XML
+
+```java
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:application.xml");
+										|
+                                        |
+                                      
+      public ClassPathXmlApplicationContext(
+			String[] configLocations, boolean refresh, @Nullable ApplicationContext parent)
+			throws BeansException {
+
+		super(parent);
+		setConfigLocations(configLocations);
+		if (refresh) {
+            //核心方法 refresh
+			refresh();
+		}
+	}
+
+```
+
+`refresh`函数包含了几乎`ApplicationContext`中提供的全部功能
+
+`AbstractApplicationContext`中的`refresh`实现了所有逻辑
+
+```java
+	@Override
+	public void refresh() throws BeansException, IllegalStateException {
+		synchronized (this.startupShutdownMonitor) {
+			// 准备刷新上下文环境
+			prepareRefresh();
+
+			// 初始化BeanFactory，并进行XML文件的读取
+			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
+
+			// 对BeanFactory进行各种功能填充
+			prepareBeanFactory(beanFactory);
+
+			try {
+				// 子类覆盖方法进行处理
+				postProcessBeanFactory(beanFactory);
+
+				// 激活各种BeanFactory处理器
+				invokeBeanFactoryPostProcessors(beanFactory);
+
+				// 注册拦截Bean创建的Bean处理器，这是只是注册，真正的调用在getBean时候
+				registerBeanPostProcessors(beanFactory);
+
+				// 为上下文初始化Message源，即不同语言的消息体，国际化处理
+				initMessageSource();
+
+				// 初始化应用消息广播器，并放入“applicationEventMulticaster”bean中
+				initApplicationEventMulticaster();
+
+				// 留给子类来初始化其他Bean
+				onRefresh();
+
+				// 在所有注册的bean中查找Listener bean 注册到消息广播器中
+				registerListeners();
+
+				// 实例化剩下的单实例（非惰性的）
+				finishBeanFactoryInitialization(beanFactory);
+
+				// 完成刷新过程，通知生命周期处理器lifecycleProcessor刷新过程
+                // 同时发出ContextRefreshEvent 通知别人
+				finishRefresh();
+			}
+
+			catch (BeansException ex) {
+				if (logger.isWarnEnabled()) {
+					logger.warn("Exception encountered during context initialization - " +
+							"cancelling refresh attempt: " + ex);
+				}
+
+				// Destroy already created singletons to avoid dangling resources.
+				destroyBeans();
+
+				// Reset 'active' flag.
+				cancelRefresh(ex);
+
+				// Propagate exception to caller.
+				throw ex;
+			}
+
+			finally {
+				// Reset common introspection caches in Spring's core, since we
+				// might not ever need metadata for singleton beans anymore...
+				resetCommonCaches();
+			}
+		}
+	}
+
+```
+
+**ClassPathXmlApplicationContext** 初始化的步骤：
+
+1. 初始化前的准备工作，例如对系统属性或者环境变量进行准备及验证
+
+2. 初始化BeanFactory,并对XML文件读取
+
+   这一步将会复用BeanFactory中的配置文件读取解析及其他功能，这一步后ClassPathXmlApplicationContext已经包含了BeanFactory所提供的功能，也就可以进行bean的提取等基础操作。
+
+3. 对BeanFactory进行各种功能填充
+
+   **@Qualifer与@Autowired**在这一步骤中增加的支持。
+
+4. 子类覆盖方法做额外的处理
+
+   这里留了一个空方法。留给扩展使用。 空方法`postProcessBeanFactory`
+
+5. 激活各种BeanFactory处理器
+
+6. 注册拦截Bean创建的Bean处理器，这是只是注册，真正的调用在getBean时候
+
+7. 为上下文初始化Message源，即不同语言的消息体，国际化处理
+
+8. 初始化应用消息广播器，并放入“applicationEventMulticaster”bean中
+
+9. 留给子类来初始化其他Bean
+
+10. 在所有注册的bean中查找Listener bean 注册到消息广播器中
+
+11. 实例化剩下的单实例（非惰性的）
+
+12. 完成刷新过程，通知生命周期处理器lifecycleProcessor刷新过程。同时发出ContextRefreshEvent 通知别人
+
+### 2、加载BeanFactory
+
+![image-20210202133903946](https://gitee.com/chen_yi_fenga/blog-imag/raw/master/image-20210202133903946.png)
+
+上面步骤分别为：
+
+1. 创建DefaultListableBeanFactory
+2. 指定序列化iD
+3. 定制BeanFactory
+4. 加载BeanDefinition
+5. 使用全局变量记录BeanFactory实例
+
+### 3、功能扩展
+
+进入函数PrepareBeanFactory前，spring已经完成了对配置的解析，而ApplicationContext在功能上的扩展也由此展开
+
+```java
+	protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		// 设置当前的类加载器
+		beanFactory.setBeanClassLoader(getClassLoader());
+        // 设置beanFactory的表达式语言处理器，Spring3增加了表达式语言的支持
+		beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
+        // 为beanFactory增加一个默认的propertyEditor 这个主要是对bean的属性等设置管理的一个工具
+		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
+
+		// 添加BeanPostProcessor
+		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
+        
+        //设置几个忽略自动装配的接口
+		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
+		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
+		beanFactory.ignoreDependencyInterface(ResourceLoaderAware.class);
+		beanFactory.ignoreDependencyInterface(ApplicationEventPublisherAware.class);
+		beanFactory.ignoreDependencyInterface(MessageSourceAware.class);
+		beanFactory.ignoreDependencyInterface(ApplicationContextAware.class);
+
+		// 配置几个自动装配的特殊规则
+		beanFactory.registerResolvableDependency(BeanFactory.class, beanFactory);
+		beanFactory.registerResolvableDependency(ResourceLoader.class, this);
+		beanFactory.registerResolvableDependency(ApplicationEventPublisher.class, this);
+		beanFactory.registerResolvableDependency(ApplicationContext.class, this);
+        
+        // 注册早期的后处理器以将内部bean检测为ApplicationListeners。
+        beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
+
+
+		// 增加对AspectJ的支持
+		if (beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) {
+			beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
+			// Set a temporary ClassLoader for type matching.
+			beanFactory.setTempClassLoader(new ContextTypeMatchClassLoader(beanFactory.getBeanClassLoader()));
+		}
+
+		// 添加默认的系统环境bean
+		if (!beanFactory.containsLocalBean(ENVIRONMENT_BEAN_NAME)) {
+			beanFactory.registerSingleton(ENVIRONMENT_BEAN_NAME, getEnvironment());
+		}
+		if (!beanFactory.containsLocalBean(SYSTEM_PROPERTIES_BEAN_NAME)) {
+			beanFactory.registerSingleton(SYSTEM_PROPERTIES_BEAN_NAME, getEnvironment().getSystemProperties());
+		}
+		if (!beanFactory.containsLocalBean(SYSTEM_ENVIRONMENT_BEAN_NAME)) {
+			beanFactory.registerSingleton(SYSTEM_ENVIRONMENT_BEAN_NAME, getEnvironment().getSystemEnvironment());
+		}
+	}
+```
+
+上面函数主要进行了几方面的扩展：
+
+1. 增加对SpEL语言的支持
+2. 增加对属性编辑器的支持
+3. 增加对一些内置类，比如EnvironmentAware 的信息注入
+4. 设置了依赖功能可忽略的接口
+5. 注册一些固定依赖的属性
+6. 增加AspectJ的支持
+7. 将相关的环境变量及属性注册以单例模式注册
+
+### 4、 BeanFactory的后处理
