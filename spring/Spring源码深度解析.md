@@ -1657,7 +1657,10 @@ public static void invokeBeanFactoryPostProcessors(
       BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
       List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();
       List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
-
+	
+       /**
+       * 硬编码注册后处理器
+       */
       for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
          if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
             BeanDefinitionRegistryPostProcessor registryProcessor =
@@ -1780,3 +1783,245 @@ public static void invokeBeanFactoryPostProcessors(
    beanFactory.clearMetadataCache();
 }
 ```
+
+### 5、注册BeanPostProcessor
+
+这里仅仅实现的是注册，而不是调用。真正的调用在bean的实例化阶段进行的。
+
+`registerBeanPostProcessors`核心方法，主要逻辑是注册实现`BeanPostProcessors`的类。并且在注册是要根据**有无顺序**进行排序
+
+```java
+	public static void registerBeanPostProcessors(
+			ConfigurableListableBeanFactory beanFactory, AbstractApplicationContext applicationContext) {
+
+		String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class, true, false);
+
+		// BeanPostProcessorChecker 是一个普通的信息打印，可能会有些情况
+		// 当spring的配置中的后处理还没有被注册就已经开始了bean的初始化时
+		// 便会打印出BeanPostProcessorChecker中设定的信息
+		int beanProcessorTargetCount = beanFactory.getBeanPostProcessorCount() + 1 + postProcessorNames.length;
+		beanFactory.addBeanPostProcessor(new BeanPostProcessorChecker(beanFactory, beanProcessorTargetCount));
+
+		//PriorityOrdered 保证顺序
+		List<BeanPostProcessor> priorityOrderedPostProcessors = new ArrayList<>();
+		List<BeanPostProcessor> internalPostProcessors = new ArrayList<>();
+        // 使用order保证顺序
+		List<String> orderedPostProcessorNames = new ArrayList<>();
+        // 无序
+		List<String> nonOrderedPostProcessorNames = new ArrayList<>();
+		for (String ppName : postProcessorNames) {
+			if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
+				BeanPostProcessor pp = beanFactory.getBean(ppName, BeanPostProcessor.class);
+				priorityOrderedPostProcessors.add(pp);
+				if (pp instanceof MergedBeanDefinitionPostProcessor) {
+					internalPostProcessors.add(pp);
+				}
+			}
+			else if (beanFactory.isTypeMatch(ppName, Ordered.class)) {
+				orderedPostProcessorNames.add(ppName);
+			}
+			else {
+				nonOrderedPostProcessorNames.add(ppName);
+			}
+		}
+
+		// 第一步，注册所有实现了PriorityOrdered的BeanPostProcessor
+		sortPostProcessors(priorityOrderedPostProcessors, beanFactory);
+		registerBeanPostProcessors(beanFactory, priorityOrderedPostProcessors);
+
+		// 第二步，注册所有实现Ordered的BeanPostProcessor
+		List<BeanPostProcessor> orderedPostProcessors = new ArrayList<>(orderedPostProcessorNames.size());
+		for (String ppName : orderedPostProcessorNames) {
+			BeanPostProcessor pp = beanFactory.getBean(ppName, BeanPostProcessor.class);
+			orderedPostProcessors.add(pp);
+			if (pp instanceof MergedBeanDefinitionPostProcessor) {
+				internalPostProcessors.add(pp);
+			}
+		}
+		sortPostProcessors(orderedPostProcessors, beanFactory);
+		registerBeanPostProcessors(beanFactory, orderedPostProcessors);
+
+		// 第三步，注册所有无序的BeanPostProcessor
+		List<BeanPostProcessor> nonOrderedPostProcessors = new ArrayList<>(nonOrderedPostProcessorNames.size());
+		for (String ppName : nonOrderedPostProcessorNames) {
+			BeanPostProcessor pp = beanFactory.getBean(ppName, BeanPostProcessor.class);
+			nonOrderedPostProcessors.add(pp);
+			if (pp instanceof MergedBeanDefinitionPostProcessor) {
+		  		internalPostProcessors.add(pp);
+			}
+		}
+stProcessors(beanFactory, internalPostProcessors);
+
+		// 添加 ApplicationListeners 探测器
+		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(applicationContext));
+	}
+```
+
+### 6、初始化ApplicationEventMulticaster
+
+#### Spring事件监听的简单用法
+
+1. 定义监听事件
+
+   ```java
+   /**
+    * @author 陈一锋
+    * @date 2021/1/22 10:10
+    **/
+   public class TestEvent extends ApplicationEvent {
+   
+       /**
+        * Create a new {@code ApplicationEvent}.
+        *
+        * @param source the object on which the event initially occurred or with
+        *               which the event is associated (never {@code null})
+        */
+       public TestEvent(Object source) {
+           super(source);
+       }
+   }
+   ```
+
+2. 定义监听器
+
+   ```java
+   /**
+    * @author 陈一锋
+    * @date 2021/1/22 10:49
+    **/
+   @Component
+   public class TestListener implements ApplicationListener<TestEvent> {
+   
+       /**
+        * Handle an application event.
+        *
+        * @param event the event to respond to
+        */
+       @Override
+       public void onApplicationEvent(TestEvent event) {
+           // 接收到事件
+           System.out.println("接收到事件通知:"+event.getClass().getName());
+           System.out.println(event.getSource());
+           System.out.println(event.getMsg());
+       }
+   }
+   
+   ```
+
+3. 测试
+
+   ```java
+   /**
+    * @author 陈一锋
+    * @date 2021/1/22 10:51
+    **/
+   public class Client {
+   
+       public static void main(String[] args) {
+           // 1. 初始化容器
+           ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:application.xml");
+           // 2. 创建自定义事件
+           TestEvent testEvent = new TestEvent("myEvent","messages");
+           //发布事件
+           context.publishEvent(testEvent);
+       }
+   }
+   
+   ```
+
+ 主要步骤就是定义好事件及监听器，事件触发后的处理流程
+
+然后使用容器`publishEvent`方法发布事件
+
+#### **源码**
+
+`refresh`中初始化广播器`initApplicationEventMulticaster();`
+
+
+```java
+	 * Initialize the ApplicationEventMulticaster.
+	 * Uses SimpleApplicationEventMulticaster if none defined in the context.
+	 */
+	protected void initApplicationEventMulticaster() {
+		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+		if (beanFactory.containsLocalBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME)) {
+            // 如果自定义了事件广播器,则使用用户自定义的事件广播器
+			this.applicationEventMulticaster =
+					beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class);
+			if (logger.isTraceEnabled()) {
+				logger.trace("Using ApplicationEventMulticaster [" + this.applicationEventMulticaster + "]");
+			}
+		}
+		else {
+            // 如果没有自定义事件广播器，则默认使用SimpleApplicationEventMulticaster
+			this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
+			beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, this.applicationEventMulticaster);
+			if (logger.isTraceEnabled()) {
+				logger.trace("No '" + APPLICATION_EVENT_MULTICASTER_BEAN_NAME + "' bean, using " +
+						"[" + this.applicationEventMulticaster.getClass().getSimpleName() + "]");
+			}
+		}
+	}
+```
+
+当发布事件时
+
+```java
+	protected void publishEvent(Object event, @Nullable ResolvableType eventType) {
+		Assert.notNull(event, "Event must not be null");
+
+		// Decorate event as an ApplicationEvent if necessary
+		ApplicationEvent applicationEvent;
+		if (event instanceof ApplicationEvent) {
+			applicationEvent = (ApplicationEvent) event;
+		}
+		else {
+			applicationEvent = new PayloadApplicationEvent<>(this, event);
+			if (eventType == null) {
+				eventType = ((PayloadApplicationEvent<?>) applicationEvent).getResolvableType();
+			}
+		}
+
+		// Multicast right now if possible - or lazily once the multicaster is initialized
+		if (this.earlyApplicationEvents != null) {
+			this.earlyApplicationEvents.add(applicationEvent);
+		}
+		else {
+            //这一段是核心，获取事件广播器并发布事件
+			getApplicationEventMulticaster().multicastEvent(applicationEvent, eventType);
+		}
+
+		// Publish event via parent context as well...
+		if (this.parent != null) {
+			if (this.parent instanceof AbstractApplicationContext) {
+				((AbstractApplicationContext) this.parent).publishEvent(event, eventType);
+			}
+			else {
+				this.parent.publishEvent(event);
+			}
+		}
+	}
+
+```
+
+
+
+
+
+```java
+	public void multicastEvent(final ApplicationEvent event, @Nullable ResolvableType eventType) {
+		ResolvableType type = (eventType != null ? eventType : resolveDefaultEventType(event));
+        // 如果有线程池则使用线程池
+		Executor executor = getTaskExecutor();
+        // 获取所有符合的监听器并遍历发布事件
+		for (ApplicationListener<?> listener : getApplicationListeners(event, type)) {
+			if (executor != null) {
+				executor.execute(() -> invokeListener(listener, event));
+			}
+			else {
+				invokeListener(listener, event);
+			}
+		}
+	}
+```
+
