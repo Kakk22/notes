@@ -2004,10 +2004,6 @@ stProcessors(beanFactory, internalPostProcessors);
 
 ```
 
-
-
-
-
 ```java
 	public void multicastEvent(final ApplicationEvent event, @Nullable ResolvableType eventType) {
 		ResolvableType type = (eventType != null ? eventType : resolveDefaultEventType(event));
@@ -2022,6 +2018,137 @@ stProcessors(beanFactory, internalPostProcessors);
 				invokeListener(listener, event);
 			}
 		}
+	}
+```
+
+### 7、初始化非延迟加载单例
+
+初始化剩下的非延迟bean
+
+`refresh`中的`finishBeanFactoryInitialization(beanFactory)`方法
+
+```java
+	protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
+		// 初始化上下文中的ConversionService 该类主要是转换器
+		if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME) &&
+				beanFactory.isTypeMatch(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class)) {
+			beanFactory.setConversionService(
+					beanFactory.getBean(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class));
+		}
+
+		// Register a default embedded value resolver if no bean post-processor
+		// (such as a PropertyPlaceholderConfigurer bean) registered any before:
+		// at this point, primarily for resolution in annotation attribute values.
+		if (!beanFactory.hasEmbeddedValueResolver()) {
+			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
+		}
+
+		// Initialize LoadTimeWeaverAware beans early to allow for registering their transformers early.
+		String[] weaverAwareNames = beanFactory.getBeanNamesForType(LoadTimeWeaverAware.class, false, false);
+		for (String weaverAwareName : weaverAwareNames) {
+			getBean(weaverAwareName);
+		}
+
+		// Stop using the temporary ClassLoader for type matching.
+		beanFactory.setTempClassLoader(null);
+
+		// 冻结所有bean的定义，说明注册的bean将不被修改或任何进一步的处理
+		beanFactory.freezeConfiguration();
+
+		// 初始化剩下的非延迟加载的单实例
+		beanFactory.preInstantiateSingletons();
+	}
+```
+
+初始化非延迟加载
+
+`ApplicationContext`默认为启动时将所有的`bean`提前进行实例化。
+
+好处是配置有任何错误就立刻被发现
+
+```java
+	@Override
+	public void preInstantiateSingletons() throws BeansException {
+		if (logger.isTraceEnabled()) {
+			logger.trace("Pre-instantiating singletons in " + this);
+		}
+
+		// 遍历所有注册的bean并实例化
+		List<String> beanNames = new ArrayList<>(this.beanDefinitionNames);
+
+		// Trigger initialization of all non-lazy singleton beans...
+		for (String beanName : beanNames) {
+			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
+			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
+				if (isFactoryBean(beanName)) {
+					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
+					if (bean instanceof FactoryBean) {
+						FactoryBean<?> factory = (FactoryBean<?>) bean;
+						boolean isEagerInit;
+						if (System.getSecurityManager() != null && factory instanceof SmartFactoryBean) {
+							isEagerInit = AccessController.doPrivileged(
+									(PrivilegedAction<Boolean>) ((SmartFactoryBean<?>) factory)::isEagerInit,
+									getAccessControlContext());
+						}
+						else {
+							isEagerInit = (factory instanceof SmartFactoryBean &&
+									((SmartFactoryBean<?>) factory).isEagerInit());
+						}
+						if (isEagerInit) {
+							getBean(beanName);
+						}
+					}
+				}
+				else {
+                    //核心方法
+					getBean(beanName);
+				}
+			}
+		}
+
+		// Trigger post-initialization callback for all applicable beans...
+		for (String beanName : beanNames) {
+			Object singletonInstance = getSingleton(beanName);
+			if (singletonInstance instanceof SmartInitializingSingleton) {
+				SmartInitializingSingleton smartSingleton = (SmartInitializingSingleton) singletonInstance;
+				if (System.getSecurityManager() != null) {
+					AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
+						smartSingleton.afterSingletonsInstantiated();
+						return null;
+					}, getAccessControlContext());
+				}
+				else {
+					smartSingleton.afterSingletonsInstantiated();
+				}
+			}
+		}
+	}
+```
+
+### 8、finishRefresh
+
+主要逻辑是
+
+1. 初始化所有实现Lifecycle接口的bean
+2. 调用其start方法开启生命周期
+3. 发布容器刷新事件
+
+```java
+	protected void finishRefresh() {
+		// Clear context-level resource caches (such as ASM metadata from scanning).
+		clearResourceCaches();
+
+		// Initialize lifecycle processor for this context.
+		initLifecycleProcessor();
+
+		// Propagate refresh to lifecycle processor first.
+		getLifecycleProcessor().onRefresh();
+
+		// Publish the final event.
+		publishEvent(new ContextRefreshedEvent(this));
+
+		// Participate in LiveBeansView MBean, if active.
+		LiveBeansView.registerApplicationContext(this);
 	}
 ```
 
