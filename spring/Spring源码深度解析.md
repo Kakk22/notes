@@ -2152,3 +2152,115 @@ stProcessors(beanFactory, internalPostProcessors);
 	}
 ```
 
+### spring bean的生命周期图
+
+![](https://gitee.com/chen_yi_fenga/blog-imag/raw/master/image-20210215222109666.png)
+
+## 第7章 AOP
+
+### 1、动态AOP使用示例
+
+创建用于拦截的bean
+
+```java
+public class HelloServiceImpl implements HelloService {
+
+    @Override
+    public void hello(){
+        System.out.println("hello");
+    }
+}
+```
+
+创建Advisor
+
+```java
+@Aspect
+public class AspectDemo {
+
+    /**
+     * 所有类的hello方法会被执行aop
+     */
+    @Pointcut("execution(* *.hello(..))")
+    public void pointcut() {
+    }
+
+    @Before("pointcut()")
+    public void before() {
+        System.out.println("before");
+    }
+
+    @After("pointcut()")
+    public void after() {
+        System.out.println("after");
+    }
+
+    @Around("pointcut()")
+    public Object around(ProceedingJoinPoint proceedingJoinPoint) {
+        System.out.println("before around");
+        Object result = null;
+        try {
+            result = proceedingJoinPoint.proceed();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+        System.out.println("after around");
+        return result;
+    }
+}
+```
+
+引入依赖
+
+```xml
+        <!--aop-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>5.2.8.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.8.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.8.9</version>
+        </dependency>
+```
+
+修改配置文件
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-autowire="byName">
+
+    <aop:aspectj-autoproxy/>
+
+
+    <bean id="helloService" class="com.cyf.aop.HelloServiceImpl"/>
+    <bean id="aspect" class="com.cyf.aop.AspectDemo"></bean>
+</beans>
+```
+
+结果输出
+
+```
+before around
+before
+hello
+after
+after around
+```
+
+结果Spring对所有类的hello方法进行增强
+
+### 2、动态AOP自定义标签
+
