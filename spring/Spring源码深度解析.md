@@ -3310,3 +3310,85 @@ PreparedStatement接口继承Statement
 
 1. PreparedStatement实例包含已编译的SQL语句。PreparedStatement对象中的SQL语句可具有一个或多个IN参数，该SQL语句为每个IN参数保留一个问号（“?”）作占位符。每个问号的值必须通过setXXX方法来提供
 2. 由于PreparedStatement对象已预编译，所以其执行速度比Statement快得多。
+
+# 第9章 Mybatis源码分析
+
+## 1、源码debug
+
+以`insert`语句为例。
+
+首先`mapper`接口是一个代理实现类。调用`save`方法执行时会调用`invoke`方法。
+
+**MapperProxy**代理类
+
+```java
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args, SqlSession sqlSession) throws Throwable {
+        //执行execute方法
+      return mapperMethod.execute(sqlSession, args);
+    }
+```
+
+`execute`根据mapperMethod中封装的信息，匹配对应的语句
+
+然后执行`sqlSession`的`insert`方法
+
+```java
+public Object execute(SqlSession sqlSession, Object[] args) {
+  Object result;
+  switch (command.getType()) {
+    case INSERT: {
+      Object param = method.convertArgsToSqlCommandParam(args);
+      result = rowCountResult(sqlSession.insert(command.getName(), param));
+      break;
+    }
+    case UPDATE: {
+      Object param = method.convertArgsToSqlCommandParam(args);
+      result = rowCountResult(sqlSession.update(command.getName(), param));
+      break;
+    }
+    case DELETE: {
+      Object param = method.convertArgsToSqlCommandParam(args);
+      result = rowCountResult(sqlSession.delete(command.getName(), param));
+      break;
+    }
+    case SELECT:
+      if (method.returnsVoid() && method.hasResultHandler()) {
+        executeWithResultHandler(sqlSession, args);
+        result = null;
+      } else if (method.returnsMany()) {
+        result = executeForMany(sqlSession, args);
+      } else if (method.returnsMap()) {
+        result = executeForMap(sqlSession, args);
+      } else if (method.returnsCursor()) {
+        result = executeForCursor(sqlSession, args);
+      } else {
+        Object param = method.convertArgsToSqlCommandParam(args);
+        result = sqlSession.selectOne(command.getName(), param);
+        if (method.returnsOptional()
+            && (result == null || !method.getReturnType().equals(result.getClass()))) {
+          result = Optional.ofNullable(result);
+        }
+      }
+      break;
+    case FLUSH:
+      result = sqlSession.flushStatements();
+      break;
+    default:
+      throw new BindingException("Unknown execution method for: " + command.getName());
+  }
+  if (result == null && method.getReturnType().isPrimitive() && !method.returnsVoid()) {
+    throw new BindingException("Mapper method '" + command.getName()
+        + " attempted to return null from a method with a primitive return type (" + method.getReturnType() + ").");
+  }
+  return result;
+}
+```
+
+`insert`最后会调用`SimpleExecutor`的`doUpdate`方法
+
+其实就是生成了`PreparedStatement`对象
+
+然后最终调用其`execute` 执行结果。
+
+![image-20210222223530838](https://gitee.com/chen_yi_fenga/blog-imag/raw/master/image-20210222223530838.png)
