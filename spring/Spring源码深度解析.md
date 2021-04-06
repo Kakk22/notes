@@ -3392,3 +3392,22 @@ public Object execute(SqlSession sqlSession, Object[] args) {
 然后最终调用其`execute` 执行结果。
 
 ![image-20210222223530838](https://gitee.com/chen_yi_fenga/blog-imag/raw/master/image-20210222223530838.png)
+
+# 第10章 事务
+
+## 1、事务自定义标签
+
+`TxNamespaceHandler`Spring事务处理类
+
+逻辑在初始化函数`init`中实现
+
+```java
+	public void init() {
+		registerBeanDefinitionParser("advice", new TxAdviceBeanDefinitionParser());
+		registerBeanDefinitionParser("annotation-driven", new AnnotationDrivenBeanDefinitionParser());
+		registerBeanDefinitionParser("jta-transaction-manager", new JtaTransactionManagerBeanDefinitionParser());
+	}
+```
+
+Spring会使用类`AnnotationDrivenBeanDefinitionParser`的parse方法进行解析
+
